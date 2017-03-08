@@ -6,10 +6,8 @@ import coordinates.Position2D;
  */
 public interface MowerMachineInterface
 {
-  public void setPosition2D(Position2D aInPosition);
+
   public Position2D getCurrentPosition();
-  public void move();
-  public void rotateClockWise();
-  public void rotateAntiClockWise();
+  public boolean queryTreatment(String aInQuery);
 
 }

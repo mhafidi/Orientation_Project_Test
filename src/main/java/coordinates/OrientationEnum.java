@@ -6,10 +6,10 @@ package coordinates;
  */
 public enum OrientationEnum
 {
-  NORTH("N"),
-  EAST("E"),
-  SOUTH("S"),
-  WEST("W");
+  NORTH("NORTH"),
+  EAST("EAST"),
+  SOUTH("SOUTH"),
+  WEST("WEST");
 
   private String name;
 

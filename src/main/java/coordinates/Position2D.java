@@ -1,5 +1,8 @@
 package coordinates;
 
+import utils.Maths;
+import utils.StringsUtil;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +72,7 @@ public class Position2D
     Integer index= IntStream.range(0,unmodifiableOrientationMap.size()).
         filter(id->unmodifiableOrientationMap.get(id)==orientation).findFirst().getAsInt();
 
-    orientation =unmodifiableOrientationMap.get((index+1) %(unmodifiableOrientationMap.size()));
+    orientation =unmodifiableOrientationMap.get(Math.abs((index+1) %(unmodifiableOrientationMap.size())));
 
   }
   public void rotateAntiClockWise()
@@ -77,7 +80,7 @@ public class Position2D
     Integer index= IntStream.range(0,unmodifiableOrientationMap.size()).
         filter(id->unmodifiableOrientationMap.get(id)==orientation).findFirst().getAsInt();
 
-    orientation =unmodifiableOrientationMap.get((index-1) %(unmodifiableOrientationMap.size()));
+    orientation =unmodifiableOrientationMap.get(Maths.posiveModulo((index - 1) , (unmodifiableOrientationMap.size())));
 
   }
 
