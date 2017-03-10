@@ -8,6 +8,6 @@ public interface MowerMachineInterface
 {
 
   public Position2D getCurrentPosition();
-  public boolean queryTreatment(String aInQuery);
+  public Position2D computeDestination(String aInQuery);
 
 }

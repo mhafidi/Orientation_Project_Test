@@ -14,7 +14,8 @@ import java.util.Map;
  */
 public class FileParser
 {
-  FileReader fileReader;
+  private FileReader fileReader;
+  private String fileName;
   private Logger logger = Logger.getInstance();
   private final String CALSS_NAME = this.getClass().toString();
   PrintStream PROMPT = System.out;
@@ -26,6 +27,8 @@ public class FileParser
     {
       fileReader = new FileReader(aInFile);
       filteredInstructions= new HashMap<>();
+      File file = new File(aInFile);
+      fileName = file.getName();
     }
     catch (FileNotFoundException e)
     {
@@ -60,6 +63,10 @@ public class FileParser
     return fileLines;
   }
 
+  public String getFileName()
+  {
+    return fileName;
+  }
   public boolean filterValidInstructions()
   {
     Integer index=0;
@@ -67,7 +74,7 @@ public class FileParser
 
     for (String lString:getFileLines())
     {
-      if(StringsUtil.coordinatesValidator(lString))
+      if(StringsUtil.getInstance().coordinatesValidator(lString))
       {
         if(check)
         {
@@ -78,7 +85,7 @@ public class FileParser
         check =true;
         filteredInstructions.put(index,list);
       }
-      else if(StringsUtil.directionsValidator(lString) && check)
+      else if(StringsUtil.getInstance().directionsValidator(lString) && check)
       {
         List l= filteredInstructions.get(index);
         l.add(lString);
@@ -88,4 +95,8 @@ public class FileParser
     return !filteredInstructions.isEmpty();
   }
 
+  public Map getFileFilteredInstructions()
+  {
+    return filteredInstructions;
+  }
 }

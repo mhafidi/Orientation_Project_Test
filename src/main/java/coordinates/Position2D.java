@@ -17,25 +17,51 @@ public class Position2D
   protected Integer x;
   protected Integer y;
   protected OrientationEnum orientation;
-
-
-  Position2D(Position2D aInPosition2D)
-  {
-    this.x =aInPosition2D.getX();
-    this.y =aInPosition2D.getY();
-    this.orientation = aInPosition2D.getOrientation();
-  }
-   Map<Integer,OrientationEnum> realMap = new HashMap<Integer,OrientationEnum>();
+  Map<Integer, OrientationEnum> realMap = new HashMap<Integer, OrientationEnum>();
 
   {
-    realMap.put(0,OrientationEnum.NORTH);
-    realMap.put(1,OrientationEnum.EAST);
-    realMap.put(2,OrientationEnum.SOUTH);
-    realMap.put(3,OrientationEnum.WEST);
+    realMap.put(0, OrientationEnum.NORTH);
+    realMap.put(1, OrientationEnum.EAST);
+    realMap.put(2, OrientationEnum.SOUTH);
+    realMap.put(3, OrientationEnum.WEST);
   }
 
   Map<Integer, OrientationEnum> unmodifiableOrientationMap = Collections.unmodifiableMap(realMap);
 
+  public Position2D(Position2D aInPosition2D)
+  {
+    this.x = aInPosition2D.getX();
+    this.y = aInPosition2D.getY();
+    this.orientation = aInPosition2D.getOrientation();
+  }
+
+  public Position2D()
+  {
+
+  }
+  public Position2D(String aInQuery)
+  {
+    if(StringsUtil.getInstance().coordinatesValidator(aInQuery))
+    {
+      String delims = "[\\s]+"; //pattern based on space to decompose line into coordinates
+      String[] tokens = aInQuery.split(delims);
+     x=Integer.parseInt(tokens[0]);
+      y=Integer.parseInt(tokens[1]);
+      orientation= StringsUtil.getInstance().getOrientation(tokens[2]);
+    }
+  }
+
+
+  public Boolean checkOutOfALimitedSpace(Integer aInMaxX,Integer aInMaxY,Integer aInMinX,Integer aInMinY)
+  {
+    return x>aInMaxX || y>aInMaxY || x<aInMinX || y<aInMinY;
+  }
+  public void setPosition2D(Position2D aInPosition2D)
+  {
+    x=aInPosition2D.getX();
+    y=aInPosition2D.getY();
+    orientation =this.getOrientation();
+  }
   public Integer getX()
   {
     return x;
@@ -69,52 +95,54 @@ public class Position2D
 
   public void rotateClockWise()
   {
-    Integer index= IntStream.range(0,unmodifiableOrientationMap.size()).
-        filter(id->unmodifiableOrientationMap.get(id)==orientation).findFirst().getAsInt();
+    Integer index = IntStream.range(0, unmodifiableOrientationMap.size()).
+        filter(id -> unmodifiableOrientationMap.get(id) == orientation).findFirst().getAsInt();
 
-    orientation =unmodifiableOrientationMap.get(Math.abs((index+1) %(unmodifiableOrientationMap.size())));
+    orientation = unmodifiableOrientationMap.get(Math.abs((index + 1) % (unmodifiableOrientationMap.size())));
 
   }
+
   public void rotateAntiClockWise()
   {
-    Integer index= IntStream.range(0,unmodifiableOrientationMap.size()).
-        filter(id->unmodifiableOrientationMap.get(id)==orientation).findFirst().getAsInt();
+    Integer index = IntStream.range(0, unmodifiableOrientationMap.size()).
+        filter(id -> unmodifiableOrientationMap.get(id) == orientation).findFirst().getAsInt();
 
-    orientation =unmodifiableOrientationMap.get(Maths.posiveModulo((index - 1) , (unmodifiableOrientationMap.size())));
+    orientation = unmodifiableOrientationMap.get(Maths.posiveModulo((index - 1), (unmodifiableOrientationMap.size())));
 
   }
 
-   public void translateThroughDirection()
-   {
-     switch (orientation)
-     {
-       case NORTH:
-       {
-         y++;
-         break;
-       }
-       case SOUTH:
-       {
-         y--;
-         break;
-       }
-       case EAST:
-       {
-         x++;
-         break;
-       }
-       case WEST:
-       {
-         x--;
-         break;
-       }
-     }
-   }
+  public void translateThroughDirection()
+  {
+    switch (orientation)
+    {
+      case NORTH:
+      {
+        y++;
+        break;
+      }
+      case SOUTH:
+      {
+        y--;
+        break;
+      }
+      case EAST:
+      {
+        x++;
+        break;
+      }
+      case WEST:
+      {
+        x--;
+        break;
+      }
+    }
+  }
 
   public boolean equals(Position2D aInPosition2D)
   {
-    return (this.x==aInPosition2D.getX() && this.y==aInPosition2D.y);
+    return (this.x == aInPosition2D.getX() && this.y == aInPosition2D.y);
   }
+
   public Position2D(Integer x, Integer y, OrientationEnum orientation)
   {
 
@@ -123,8 +151,30 @@ public class Position2D
     this.orientation = orientation;
   }
 
+  @Override
   public String toString()
   {
-    return "Coordinates ("+x+","+y+")"+" and orientation: "+orientation;
+    return "Coordinates (" + x + "," + y + ")" + " and orientation: " + orientation;
+  }
+
+
+  public void shiftingPositionFromQuery(String aInString)
+  {
+    char[] charArray = aInString.toCharArray();
+    for (char aChar : charArray)
+    {
+      switch (aChar)
+      {
+        case 'A':
+          translateThroughDirection();
+          break;
+        case 'G':
+          rotateAntiClockWise();
+          break;
+        case 'D':
+          rotateClockWise();
+          break;
+      }
+    }
   }
 }

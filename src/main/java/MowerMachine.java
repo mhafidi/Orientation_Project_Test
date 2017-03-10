@@ -31,9 +31,21 @@ public class MowerMachine implements MowerMachineInterface
   MowerMachine(String aInMowerMachineName)
   {
     mowerMachineName = aInMowerMachineName;
+    position2D = new Position2D();
+
   }
 
-  private void setPosition2D(Position2D aInPosition)
+  public String getMowerMachineName()
+  {
+    return mowerMachineName;
+  }
+
+  public void setMowerMachineName(String mowerMachineName)
+  {
+    this.mowerMachineName = mowerMachineName;
+  }
+
+  public void setPosition2D(Position2D aInPosition)
   {
     if(logger!=null)
     {
@@ -67,8 +79,13 @@ public class MowerMachine implements MowerMachineInterface
     position2D.rotateAntiClockWise();
   }
 
-  public boolean queryTreatment(String aInQuery)
+  @Override
+  public Position2D computeDestination(String aInQuery)
   {
-    return false;
+    Position2D destination = new Position2D(position2D);
+
+    destination.shiftingPositionFromQuery(aInQuery);
+
+    return destination;
   }
 }

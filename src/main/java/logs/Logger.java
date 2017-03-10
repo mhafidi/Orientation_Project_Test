@@ -88,6 +88,26 @@ public class Logger extends LogsLevels
     }
 
   }
+  public void logDebug(String aInLocalCode, String aInLogDetails,OutputStream aInOutputStream)
+  {
+    String messageToPrint = formatLog(LOG_DEBUG_TAG,aInLocalCode,aInLogDetails,DateUtil.getStartDate());
+    messageToPrint = messageToPrint+"\n";
+    if(aInOutputStream==null)
+    {
+      aInOutputStream = System.out;
+    }
+
+    try
+    {
+      aInOutputStream.write(messageToPrint.getBytes());
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+
+  }
+
   public void logWarning(String aInLocalCode, String aInLogDetails,OutputStream aInOutputStream)
   {
     String messageToPrint = formatLog(LOG_WARNING_TAG,aInLocalCode,aInLogDetails,DateUtil.getStartDate());

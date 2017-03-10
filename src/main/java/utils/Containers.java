@@ -3,7 +3,6 @@ package utils;
 
 import logs.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -55,13 +54,7 @@ public class Containers
   }
   public List<String> convertCharArrayToStringList( char[] aInCharArray)
   {
-    List list = new ArrayList<>();
-    for(int i=0;i<aInCharArray.length;i++)
-    {
-      list.add(Character.toString(aInCharArray[i]));
-    }
-    /*return IntStream.range(0,aInCharArray.length).
-        mapToObj(character-> Character.toString((char) character)).collect(Collectors.toList());*/
-    return list;
+   return (List<String>) IntStream.range(0,aInCharArray.length).
+        mapToObj(characterIndex-> Character.toString((char)aInCharArray[characterIndex])).collect(Collectors.toList());
   }
 }
