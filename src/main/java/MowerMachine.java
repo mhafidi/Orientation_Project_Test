@@ -1,6 +1,8 @@
 import coordinates.Position2D;
 import logs.Logger;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,11 +18,20 @@ public class MowerMachine implements MowerMachineInterface
   protected Position2D position2D;
   private Logger logger =Logger.getInstance();
   private final String CLASS_NAME=this.getClass().toString();
-  private final PrintStream PROMPT = System.out;
-
-
+  private static PrintStream PROMPT=null;
   MowerMachine(String aInMowerMachineName, Position2D aInPosition2D)
   {
+    if(PROMPT==null)
+    {
+      try
+      {
+        PROMPT = new PrintStream(new FileOutputStream("src\\main\\logs\\logserver",true),true);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
     mowerMachineName = aInMowerMachineName;
     position2D = new Position2D(aInPosition2D);
 

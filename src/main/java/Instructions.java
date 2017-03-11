@@ -3,6 +3,8 @@ import coordinates.Position2D;
 import logs.Logger;
 import utils.StringsUtil;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 /**
@@ -16,16 +18,39 @@ public class Instructions
   protected String directions;
   String CLASS_NAME=this.getClass().getName();
   Logger logger= Logger.getInstance();
-  PrintStream PROMPT= System.out;
+  static PrintStream PROMPT=null;
 
   Instructions()
   {
+    if(PROMPT==null)
+    {
+      try
+      {
+        PROMPT = new PrintStream(new FileOutputStream("src\\main\\logs\\logserver",true),true);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
     position2D = new Position2D(0,0, OrientationEnum.NORTH);
   }
   Instructions(Position2D aInPosition2D,String aInDirection)
   {
+    if(PROMPT==null)
+    {
+      try
+      {
+        PROMPT = new PrintStream(new FileOutputStream("src\\main\\logs\\logserver"),true);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
     position2D= new Position2D(aInPosition2D);
     directions = aInDirection;
+
   }
 
   public boolean setPosition2D(String aInPosition2DQuery)

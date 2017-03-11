@@ -128,10 +128,6 @@ public class Logger extends LogsLevels
       e.printStackTrace();
     }
   }
-  public void logTestFailed(String aInLocalCode, String aInLogDetails)
-  {
-    System.out.println(formatLog(LOG_TEST_FAILED_TAG,aInLocalCode, aInLogDetails, DateUtil.getStartDate()));
-  }
 
   public void logTestSucceeded(String aInLocalCode, String aInLogDetails)
   {

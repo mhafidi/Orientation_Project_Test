@@ -1,0 +1,28 @@
+[LogError][Sat Mar 11 17:31:39 EST 2017]:Instructions:The Query: 5 5 isn't a valid Position query
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (1,2) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-0 position was successfully set to: Coordinates (1,3) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-0 in the YardMowers: Yard:1
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (3,3) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-1 position was successfully set to: Coordinates (5,1) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-1 in the YardMowers: Yard:1
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (1,2) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:This mower Stopped in the following position Coordinates (1,2) and orientation: NORTH another mower is parked in position Coordinates (1,3) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-2 position was successfully set to: Coordinates (1,2) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-2 in the YardMowers: Yard:1
+[LogError][Sat Mar 11 17:31:40 EST 2017]:Instructions:The Query: 5 5 isn't a valid Position query
+[LogError][Sat Mar 11 17:31:40 EST 2017]:Instructions:The Query: GZAARZJ3R isn't a valid Direction query
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:Checking the existence of Mowers in the entered positions before proceeding to execution
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:There are 0 Mowers in that field already
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (1,2) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-0 position was successfully set to: Coordinates (1,3) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-0 in the YardMowers: Yard:1
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (3,3) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-1 position was successfully set to: Coordinates (5,1) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-1 in the YardMowers: Yard:1
+[LogError][Sat Mar 11 17:31:40 EST 2017]:Instructions:The Query: 5 5 isn't a valid Position query
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (1,2) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-0 position was successfully set to: Coordinates (1,3) and orientation: NORTH
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-0 in the YardMowers: Yard:1
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:A New Mower was created in the position: Coordinates (3,3) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:class MowerMachine:The Mower Yard:1:Mower:-1 position was successfully set to: Coordinates (5,1) and orientation: EAST
+[LogInfo][Sat Mar 11 17:31:40 EST 2017]:YardMowers:The cache was successfully updated for the Mower: Yard:1:Mower:-1 in the YardMowers: Yard:1

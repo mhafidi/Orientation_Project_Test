@@ -1,8 +1,7 @@
 import coordinates.Position2D;
 import logs.Logger;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -16,7 +15,7 @@ import java.util.*;
 public class YardMowers
 {
   private String yardName;
-  protected Integer maxX, maxY;
+  protected Integer maxX, maxY,minX,minY;
   // this map contains alive lawn mowers
   protected List<MowerMachine> cache = new ArrayList<>();
   // list of instructions to execute they can come from several Interfaces : file, console or other service
@@ -25,19 +24,34 @@ public class YardMowers
   private Boolean debugFlag = false;
   private Logger logger = Logger.getInstance();
   private final String CLASS_NAME = this.getClass().getName();
-  private final PrintStream PROMPT = System.out;
+  private boolean buildYard=false;
+  private  static PrintStream PROMPT=null;
 
-  public YardMowers(Integer aInMaxX, Integer aInMaxY, String aInYardName)
+  public YardMowers(Integer aInMaxX, Integer aInMaxY,Integer aInMinx,Integer aInMiny, String aInYardName)
   {
     yardName = aInYardName;
-    if (aInMaxX > 0 && aInMaxY > 0)
+    if(PROMPT==null)
+    {
+      try
+      {
+        PROMPT = new PrintStream(new FileOutputStream("src\\main\\logs\\logserver",true),true);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
+    if (aInMaxX > aInMinx && aInMaxY > aInMiny)
     {
       maxX = aInMaxX;
       maxY = aInMaxY;
+      minX=aInMinx;
+      minY=aInMiny;
+      buildYard = true;
     }
     else
     {
-      logger.logError(CLASS_NAME, "Limit dimensions of yard must be greater than 0", PROMPT);
+      logger.logError(CLASS_NAME, "Limit dimensions of yard must be greater than min values", PROMPT);
     }
 
   }
@@ -65,30 +79,36 @@ public class YardMowers
   public boolean addNewFileInstruction(String aInPath)
   {
 
-    FileParser instructionFile = null;
-    try
+    if(buildYard)
     {
-      instructionFile = new FileParser(aInPath);
-
-
-      if (instructionFile.filterValidInstructions())
+      FileParser instructionFile = null;
+      try
       {
-        instructionList = instructionFile.getInstructionsList();
-        if(debugFlag)
+        instructionFile = new FileParser(aInPath);
+
+
+        if (instructionFile.filterValidInstructions())
         {
-          logger.logDebug(CLASS_NAME, "There are " + instructionList.size() + " filtered " +
-              "blocks in the file:" + instructionFile.getFileName(), PROMPT);
+          instructionList = instructionFile.getInstructionsList();
+          if (debugFlag)
+          {
+            logger.logDebug(CLASS_NAME, "There are " + instructionList.size() + " filtered " +
+                "blocks in the file:" + instructionFile.getFileName(), PROMPT);
+          }
+          return true;
         }
-        return true;
+      }
+
+      catch (FileNotFoundException e)
+      {
+        logger.logError(CLASS_NAME, e.getMessage(), PROMPT);
+        return false;
       }
     }
-
-    catch (FileNotFoundException e)
+    else
     {
-      logger.logError(CLASS_NAME, e.getMessage(), PROMPT);
-      return false;
+      logger.logError(CLASS_NAME,"make sure that the yard is well configured",PROMPT);
     }
-
     return false;
 
 
@@ -151,7 +171,7 @@ public class YardMowers
               " mower is parked in position " + temporaryPosition, PROMPT);
           return stopPosition;
         }
-        else if (temporaryPosition.checkOutOfALimitedSpace(maxX, maxY, 0, 0))
+        else if (temporaryPosition.checkOutOfALimitedSpace(maxX, maxY, minX, minY))
         {
           logger.logInfo(CLASS_NAME, "This mower Stopped in the following position " + stopPosition +
               " because it is going out of yard ", PROMPT);
@@ -169,36 +189,48 @@ public class YardMowers
 
   public void executeInstructions()
   {
-    if (!instructionList.isEmpty())
+    if(buildYard)
     {
-      logger.logInfo(CLASS_NAME,
-          "Checking the existence of Mowers in the entered positions before proceeding to execution", PROMPT);
-
-      logger.logInfo(CLASS_NAME, "There are " + cache.size() + " Mowers in that field already", PROMPT);
-
-      if (debugFlag)
+      if (!instructionList.isEmpty())
       {
-        cache.stream()
-            .peek(mowerMachine -> logger.logDebug(CLASS_NAME, String.valueOf(mowerMachine.getCurrentPosition()), PROMPT)).count();
+        logger.logInfo(CLASS_NAME,
+            "Checking the existence of Mowers in the entered positions before proceeding to execution", PROMPT);
+
+        logger.logInfo(CLASS_NAME, "There are " + cache.size() + " Mowers in that field already", PROMPT);
+
+        if (debugFlag)
+        {
+          cache.stream()
+              .peek(mowerMachine -> logger.logDebug(CLASS_NAME, String.valueOf(mowerMachine.getCurrentPosition()), PROMPT)).count();
+        }
+        instructionList.stream().peek(instruct -> executeOneBlockInstructions(instruct)).count();
+
+        instructionList.clear(); // make sure to clean the instructions list in order not to play the same again
       }
-      instructionList.stream().peek(instruct->executeOneBlockInstructions(instruct)).count();
 
-      instructionList.clear(); // make sure to clean the instructions list in order not to play the same again
+      else
+      {
+        logger.logInfo(CLASS_NAME, "There are No instructions to Execute", PROMPT);
+      }
     }
-
     else
     {
-      logger.logInfo(CLASS_NAME, "There are No instructions to Execute", PROMPT);
+      logger.logError(CLASS_NAME,"make sure that the yard is well configured",PROMPT);
     }
   }
   public boolean addInstruction( Instructions aInInstruction)
   {
-    if(!instructionList.contains(aInInstruction))
+    if(buildYard)
     {
-      instructionList.add(aInInstruction);
-      return true;
+      if (!instructionList.contains(aInInstruction))
+      {
+        instructionList.add(aInInstruction);
+        return true;
+      }
+      logger.logWarning(CLASS_NAME, "This Instruction: " + aInInstruction + " already exist", PROMPT);
     }
-    logger.logWarning(CLASS_NAME,"This Instruction: "+ aInInstruction+" already exist",PROMPT);
+    else
+      logger.logError(CLASS_NAME,"make sure that the yard is well configured",PROMPT);
     return false;
   }
   public void printCurrentCache()
@@ -209,39 +241,45 @@ public class YardMowers
 
   public Position2D executeOneBlockInstructions(Instructions aInInstructions)
   {
-    Position2D position2D = aInInstructions.getPosition2D();
-    Integer mowerCacheIndex = cacheCotainsMower(position2D);
-    Position2D lastPosition = new Position2D(position2D);
-    if (mowerCacheIndex > 0)
+    if(buildYard)
     {
+      Position2D position2D = aInInstructions.getPosition2D();
+      Integer mowerCacheIndex = cacheCotainsMower(position2D);
+      Position2D lastPosition = new Position2D(position2D);
+      if (mowerCacheIndex > 0)
+      {
 
-      Position2D mowerPosition = cache.get(mowerCacheIndex).getCurrentPosition();
-      logger.logInfo(CLASS_NAME, "A Mower Machine already parked in the position " + mowerPosition, PROMPT);
-      mowerPosition = processOfShiftingProcedures(aInInstructions.getDirections(), mowerPosition, mowerCacheIndex);
-      MowerMachine mowerMachine = new MowerMachine("Mower:-" + mowerCacheIndex, mowerPosition);
-      mowerMachine.setNewPosition(mowerPosition);
-      cache.remove(mowerCacheIndex);
-      cache.add(mowerMachine);
-      logger.logInfo(CLASS_NAME, " The cache was successfully " +
-          " updated for the Mower: " + mowerMachine.getMowerMachineName() + " in the YardMowers: " +
-          yardName, PROMPT);
-      lastPosition.setPosition2D(mowerMachine.getCurrentPosition());
+        Position2D mowerPosition = cache.get(mowerCacheIndex).getCurrentPosition();
+        logger.logInfo(CLASS_NAME, "A Mower Machine already parked in the position " + mowerPosition, PROMPT);
+        mowerPosition = processOfShiftingProcedures(aInInstructions.getDirections(), mowerPosition, mowerCacheIndex);
+        MowerMachine mowerMachine = new MowerMachine("Mower:-" + mowerCacheIndex, mowerPosition);
+        mowerMachine.setNewPosition(mowerPosition);
+        cache.remove(mowerCacheIndex);
+        cache.add(mowerMachine);
+        logger.logInfo(CLASS_NAME, " The cache was successfully " +
+            " updated for the Mower: " + mowerMachine.getMowerMachineName() + " in the YardMowers: " +
+            yardName, PROMPT);
+        lastPosition.setPosition2D(mowerMachine.getCurrentPosition());
+      }
+      else
+      {
+        MowerMachine mowerMachine = new MowerMachine(this.yardName + ":Mower:-" + cache.size(), new Position2D(position2D));
+        logger.logInfo(CLASS_NAME, "A New Mower was created in the position: " +
+            mowerMachine.getCurrentPosition(), PROMPT);
+        Position2D mowerPosition = processOfShiftingProcedures(aInInstructions.getDirections(),
+            mowerMachine.getCurrentPosition(), mowerCacheIndex);
+        mowerMachine.setNewPosition(mowerPosition);
+        cache.add(mowerMachine);
+        lastPosition.setPosition2D(mowerMachine.getCurrentPosition());
+        logger.logInfo(CLASS_NAME, "The cache was successfully " +
+            "updated for the Mower: " + mowerMachine.getMowerMachineName() + " in the YardMowers: " +
+            yardName, PROMPT);
+      }
+      return lastPosition;
     }
     else
-    {
-      MowerMachine mowerMachine = new MowerMachine(this.yardName + ":Mower:-" + cache.size(), new Position2D(position2D));
-      logger.logInfo(CLASS_NAME, "A New Mower was created in the position: " +
-          mowerMachine.getCurrentPosition(), PROMPT);
-      Position2D mowerPosition = processOfShiftingProcedures(aInInstructions.getDirections(),
-          mowerMachine.getCurrentPosition(), mowerCacheIndex);
-      mowerMachine.setNewPosition(mowerPosition);
-      cache.add(mowerMachine);
-      lastPosition.setPosition2D(mowerMachine.getCurrentPosition());
-      logger.logInfo(CLASS_NAME, "The cache was successfully " +
-          "updated for the Mower: " + mowerMachine.getMowerMachineName() + " in the YardMowers: " +
-          yardName, PROMPT);
-    }
-    return lastPosition;
+      logger.logError(CLASS_NAME,"make sure that the yard is well configured",PROMPT);
+    return null;
   }
 
   public List<MowerMachine> getCache()

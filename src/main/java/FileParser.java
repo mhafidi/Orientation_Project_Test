@@ -16,11 +16,19 @@ public class FileParser
   private String fileName;
   private Logger logger = Logger.getInstance();
   private final String CALSS_NAME = this.getClass().toString();
-  PrintStream PROMPT = System.out;
+  PrintStream PROMPT;
   private List<Instructions> instructionsList;
 
   public FileParser(String aInFile) throws FileNotFoundException
   {
+    try
+    {
+      PROMPT = new PrintStream(new FileOutputStream("src\\main\\logs\\logserver",true),true);
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
     try
     {
       fileReader = new FileReader(aInFile);

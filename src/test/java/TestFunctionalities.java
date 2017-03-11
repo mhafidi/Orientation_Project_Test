@@ -18,12 +18,13 @@ public class TestFunctionalities
   @Test
   public void instructionsTest()
   {
-    logger.logTestSucceeded(CLASS_NAME,"StartTest Instructions Class");
+
     Instructions instructions = new Instructions();
     Assert.assertFalse(instructions.setPosition2D("5 5"));
     Assert.assertTrue(instructions.setPosition2D("1 2 N"));
     Assert.assertTrue(instructions.setDirections("GAGAGAGAA"));
     Assert.assertFalse(instructions.setDirections("GZAARZJ3R"));
+    logger.logTestSucceeded(CLASS_NAME,"Test Of  Instructions Class");
   }
   @Test
   public void testFileParser()
@@ -31,7 +32,7 @@ public class TestFunctionalities
 
     try
     {
-      logger.logTestSucceeded(CLASS_NAME,"StartTest FileParser 1 Class");
+
       FileParser fileParser = new FileParser("src\\test\\testFilesToRead\\testF.csv");
       Assert.assertTrue(fileParser.filterValidInstructions());
       Assert.assertEquals(2,fileParser.getInstructionsList().size());
@@ -40,13 +41,14 @@ public class TestFunctionalities
     {
       e.printStackTrace();
     }
+    logger.logTestSucceeded(CLASS_NAME,"Test Of FileParser 1 Class");
   }
   @Test
   public void testFileParserWIthUnreadable()
   {
     try
     {
-      logger.logTestSucceeded(CLASS_NAME,"StartTest FileParser 2 Class");
+
       FileParser fileParser = new FileParser("src\\test\\testFilesToRead\\testE.csv");
       Assert.assertTrue(fileParser.filterValidInstructions());
       Assert.assertEquals(2,fileParser.getInstructionsList().size());
@@ -55,12 +57,13 @@ public class TestFunctionalities
     {
       e.printStackTrace();
     }
+    logger.logTestSucceeded(CLASS_NAME,"Test Of FileParser 2 Class");
   }
   @Test
   public void testMowerMovesInYardWithFile()
   {
-    logger.logTestSucceeded(CLASS_NAME,"YardMowers  Class with File");
-    YardMowers yardMowers = new YardMowers(100,100,"Yard:1");
+
+    YardMowers yardMowers = new YardMowers(100,100,0,0,"Yard:1");
     if(yardMowers.addNewFileInstruction("src\\test\\testFilesToRead\\testF.csv"))
     {
       yardMowers.executeInstructions();
@@ -70,6 +73,7 @@ public class TestFunctionalities
     Assert.assertEquals(yardMowers.getCache().stream().filter(mowerMachine ->
         mowerMachine.getCurrentPosition().equals(position2D1)||mowerMachine.getCurrentPosition().equals(position2D2))
         .count(),2);
+    logger.logTestSucceeded(CLASS_NAME,"Test Of YardMowers  Class with File");
 
   }
 
@@ -82,7 +86,7 @@ public class TestFunctionalities
     Assert.assertFalse(instructions.setPosition2D("5 5"));
     Assert.assertTrue(instructions.setPosition2D("1 2 N"));
     Assert.assertTrue(instructions.setDirections("GAGAGAGAA"));
-    YardMowers yardMowers = new YardMowers(100,100,"Yard:1");
+    YardMowers yardMowers = new YardMowers(100,100,-2,-3,"Yard:1");
     Position2D position2D= yardMowers.executeOneBlockInstructions(instructions);
     Assert.assertTrue(position2D.equals(new Position2D("1 3 N")));
     Assert.assertTrue(instructions.setPosition2D("3 3 E"));
@@ -96,7 +100,7 @@ public class TestFunctionalities
  public void testCollision()
   {
     logger.logTestSucceeded(CLASS_NAME,"YardMowers  Class in case of collision");
-    YardMowers yardMowers = new YardMowers(100,100,"Yard:1");
+    YardMowers yardMowers = new YardMowers(100,100,-2,-4,"Yard:1");
     Instructions instructions = new Instructions();
     Assert.assertFalse(instructions.setPosition2D("5 5"));
     Assert.assertTrue(instructions.setPosition2D("1 2 N"));
