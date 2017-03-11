@@ -15,11 +15,7 @@ public class DateUtil
 {
   private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-  @PostConstruct
-  public void initDateFormatter()
-  {
-    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
+
 
   public static String getStartDate()
   {
@@ -27,11 +23,6 @@ public class DateUtil
     return Calendar.getInstance().getTime().toString();
   }
 
-  public static String getEndDate()
-  {
-    String startDate = getDateAsString(new Date());
-    return startDate;
-  }
 
   private static String getDateAsString(Date date)
   {

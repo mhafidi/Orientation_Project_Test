@@ -37,7 +37,7 @@ public class Position2D
 
   public Position2D(String aInQuery)
   {
-    if (StringsUtil.getInstance().coordinatesValidator(aInQuery))
+    if (StringsUtil.getInstance().isPosition2D(aInQuery))
     {
       String delims = "[\\s]+"; //pattern based on space to decompose line into coordinates
       String[] tokens = aInQuery.split(delims);
@@ -57,7 +57,7 @@ public class Position2D
   {
     x = aInPosition2D.getX();
     y = aInPosition2D.getY();
-    orientation = this.getOrientation();
+    orientation = aInPosition2D.getOrientation();
   }
 
   public Integer getX()
@@ -141,6 +141,10 @@ public class Position2D
     return (this.x == aInPosition2D.getX() && this.y == aInPosition2D.y);
   }
 
+  public boolean equals(String aInPositionQuery)
+  {
+    return StringsUtil.getInstance().isPosition2D(aInPositionQuery)&& this.equals(new Position2D(aInPositionQuery));
+  }
   public Position2D(Integer x, Integer y, OrientationEnum orientation)
   {
 

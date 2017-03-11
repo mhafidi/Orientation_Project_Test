@@ -135,7 +135,7 @@ public class Logger extends LogsLevels
 
   public void logTestSucceeded(String aInLocalCode, String aInLogDetails)
   {
-    System.out.printf(formatLog(LOG_TEST_SUCCEEDED_TAG,aInLocalCode, aInLogDetails, DateUtil.getStartDate()));
+    System.out.println(formatLog(LOG_TEST_SUCCEEDED_TAG,aInLocalCode, aInLogDetails, DateUtil.getStartDate()));
   }
 
 

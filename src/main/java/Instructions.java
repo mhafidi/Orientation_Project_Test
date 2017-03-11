@@ -1,4 +1,9 @@
+import coordinates.OrientationEnum;
 import coordinates.Position2D;
+import logs.Logger;
+import utils.StringsUtil;
+
+import java.io.PrintStream;
 
 /**
  * PackageName PACKAGE_NAME
@@ -7,15 +12,44 @@ import coordinates.Position2D;
 public class Instructions
 {
 
-  Position2D position2D;
-  String directions;
+  protected Position2D position2D;
+  protected String directions;
+  String CLASS_NAME=this.getClass().getName();
+  Logger logger= Logger.getInstance();
+  PrintStream PROMPT= System.out;
 
+  Instructions()
+  {
+    position2D = new Position2D(0,0, OrientationEnum.NORTH);
+  }
   Instructions(Position2D aInPosition2D,String aInDirection)
   {
-    position2D.setPosition2D(aInPosition2D);
+    position2D= new Position2D(aInPosition2D);
     directions = aInDirection;
   }
 
+  public boolean setPosition2D(String aInPosition2DQuery)
+  {
+    if(StringsUtil.getInstance().isPosition2D(aInPosition2DQuery))
+    {
+      position2D.setPosition2D(new Position2D(aInPosition2DQuery));
+      return true;
+    }
+    logger.logError(CLASS_NAME,"The Query: "+aInPosition2DQuery+" isn't a valid Position query",PROMPT);
+
+    return false;
+  }
+  public boolean setDirections(String aInDirectionQuery)
+  {
+    if(StringsUtil.getInstance().isDirection(aInDirectionQuery))
+    {
+      directions= aInDirectionQuery;
+      return true;
+    }
+    logger.logError(CLASS_NAME,"The Query: "+aInDirectionQuery+" isn't a valid Direction query",PROMPT);
+    return false;
+
+  }
   public Position2D getPosition2D()
   {
     return position2D;
@@ -31,8 +65,15 @@ public class Instructions
     return directions;
   }
 
-  public void setDirections(String directions)
+
+  public boolean equals(Instructions aInInstructions)
   {
-    this.directions = directions;
+    return aInInstructions!=null?
+        (aInInstructions.position2D.equals(position2D)&&aInInstructions.getDirections().equals(directions)):false;
   }
+  public String toString()
+  {
+    return position2D+" Directions:"+ directions;
+  }
+
 }

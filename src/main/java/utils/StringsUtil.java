@@ -1,13 +1,11 @@
 package utils;
 
 import coordinates.OrientationEnum;
-import coordinates.Position2D;
 import logs.Logger;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
@@ -19,9 +17,7 @@ public class StringsUtil
 
   private final  String[] ORIENTATIONS = {"N","E","W","S"};
   private final  String[] DIRECTIONS = {"D","A","G"};
-  private  final OutputStream PROMPT = System.out ;
-  Logger logger = Logger.getInstance();
-  private final String CLASS_NAME=this.getClass().getName();
+
 
    private static StringsUtil instance;
    private StringsUtil()
@@ -32,13 +28,6 @@ public class StringsUtil
   {
     return instance==null?new StringsUtil():instance;
   }
-    public List<String> convertStringLineToCharList(String aInLine)
-   {
-     List<String> stringList = new ArrayList<>();
-     String[] tokens = aInLine.trim().split("(?! ^ )");
-     stringList = Containers.getInstance().convertStringTabToList(tokens);
-     return stringList;
-   }
 
    public boolean isInteger(String aInString)
   {
@@ -59,13 +48,8 @@ public class StringsUtil
         equals(aInString)).findAny().isPresent();
 
   }
-   private boolean isDirection(String aInString)
-  {
-    return IntStream.range(0,DIRECTIONS.length).filter(index->DIRECTIONS[index].
-        equals(aInString)).findAny().isPresent();
 
-  }
-   public boolean coordinatesValidator(String aInStringLine)
+   public boolean isPosition2D(String aInStringLine)
   {
     if(aInStringLine!=null)
     {
@@ -101,7 +85,7 @@ public class StringsUtil
   }
 
   //returns false if one character isn't a direction char
-   public boolean directionsValidator(String aInStringLine)
+   public boolean isDirection(String aInStringLine)
   {
     return !Containers.getInstance().convertCharArrayToStringList(aInStringLine.toCharArray()).stream()
         .filter(str-> !Containers.getInstance().convertStringTabToList(DIRECTIONS).contains(str)).findAny().isPresent();

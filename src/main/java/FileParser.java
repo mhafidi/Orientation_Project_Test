@@ -1,12 +1,10 @@
-package utils;
-
+import coordinates.Position2D;
 import logs.Logger;
+import utils.StringsUtil;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * PackageName utils
@@ -19,14 +17,14 @@ public class FileParser
   private Logger logger = Logger.getInstance();
   private final String CALSS_NAME = this.getClass().toString();
   PrintStream PROMPT = System.out;
-  private Map<Integer,List<String>> filteredInstructions;
+  private List<Instructions> instructionsList;
 
   public FileParser(String aInFile) throws FileNotFoundException
   {
     try
     {
       fileReader = new FileReader(aInFile);
-      filteredInstructions= new HashMap<>();
+      instructionsList = new ArrayList<>();
       File file = new File(aInFile);
       fileName = file.getName();
     }
@@ -72,33 +70,35 @@ public class FileParser
   public boolean filterValidInstructions()
   {
     Integer index=0;
-    boolean check=false; //the first filtered instruction must be coordinates and not directions
+    boolean check=false; //the first filtered instruction must be coordinates and not directions (for index==0)
+
 
     for (String lString:getFileLines())
     {
-      if(StringsUtil.getInstance().coordinatesValidator(lString))
+      if(StringsUtil.getInstance().isPosition2D(lString))
       {
+
         if(check)
         {
           index++;
         }
-        List list= new ArrayList<>();
-        list.add(lString);
+        Instructions instructions = new Instructions(new Position2D(lString),"");
         check =true;
-        filteredInstructions.put(index,list);
+        instructionsList.add(index,instructions);
       }
-      else if(StringsUtil.getInstance().directionsValidator(lString) && check)
+      else if(StringsUtil.getInstance().isDirection(lString) && check)
       {
-        List l= filteredInstructions.get(index);
-        l.add(lString);
-        filteredInstructions.put(index,l);
+        Instructions linsInstructions= instructionsList.get(index);
+        linsInstructions.setDirections(linsInstructions.getDirections()+lString);
+        instructionsList.set(index,linsInstructions);
       }
     }
-    return !filteredInstructions.isEmpty();
+    return !instructionsList.isEmpty();
   }
 
-  public Map getFileFilteredInstructions()
+
+  public List<Instructions> getInstructionsList()
   {
-    return filteredInstructions;
+    return instructionsList;
   }
 }
