@@ -18,20 +18,11 @@ public class MowerMachine implements MowerMachineInterface
   private final String CLASS_NAME=this.getClass().toString();
   private final PrintStream PROMPT = System.out;
 
-  public static List<String> MowerLanguage = new ArrayList<String>();
 
-  {
-    MowerLanguage.add("A");
-    MowerLanguage.add("D");
-    MowerLanguage.add("G");
-  }
-
-  List<String> unmodifiableOrientationMap = Collections.unmodifiableList(MowerLanguage);
-
-  MowerMachine(String aInMowerMachineName)
+  MowerMachine(String aInMowerMachineName, Position2D aInPosition2D)
   {
     mowerMachineName = aInMowerMachineName;
-    position2D = new Position2D();
+    position2D = new Position2D(aInPosition2D);
 
   }
 
@@ -40,52 +31,21 @@ public class MowerMachine implements MowerMachineInterface
     return mowerMachineName;
   }
 
-  public void setMowerMachineName(String mowerMachineName)
+  public void setNewPosition(Position2D aInNewPosition)
   {
-    this.mowerMachineName = mowerMachineName;
-  }
 
-  public void setPosition2D(Position2D aInPosition)
-  {
-    if(logger!=null)
-    {
-      logger.logInfo(CLASS_NAME, "The previous position is set to " + aInPosition, PROMPT);
-    }
-    position2D.setX(aInPosition.getX());
-    position2D.setY(aInPosition.getY());
-    position2D.setOrientation(aInPosition.getOrientation());
-    if(logger!=null)
-    {
-      logger.logInfo(CLASS_NAME, "The Current position is set to "+ aInPosition+ " [Succeeded]",PROMPT);
-    }
+
+    position2D.setX(aInNewPosition.getX());
+    position2D.setY(aInNewPosition.getY());
+    position2D.setOrientation(aInNewPosition.getOrientation());
+
+    logger.logInfo(CLASS_NAME, "The Mower "+mowerMachineName
+        +" position was successfully set to: "+position2D,PROMPT);
+
   }
   public Position2D getCurrentPosition()
   {
     return position2D;
   }
 
-  private void move()
-  {
-    position2D.translateThroughDirection();
-  }
-
-  private void rotateClockWise()
-  {
-    position2D.rotateClockWise();
-  }
-
-  private void rotateAntiClockWise()
-  {
-    position2D.rotateAntiClockWise();
-  }
-
-  @Override
-  public Position2D computeDestination(String aInQuery)
-  {
-    Position2D destination = new Position2D(position2D);
-
-    destination.shiftingPositionFromQuery(aInQuery);
-
-    return destination;
-  }
 }

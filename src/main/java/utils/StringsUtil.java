@@ -81,23 +81,7 @@ public class StringsUtil
     return false;
   }
 
-   public Position2D computeCoordinateFromQuery(String aInQuery)
-  {
-    if(coordinatesValidator(aInQuery))
-    {
-      String delims = "[\\s]+"; //pattern based on space to decompose line into coordinates
-      String[] tokens = aInQuery.split(delims);
-      return new Position2D(Integer.parseInt(tokens[0]),Integer.parseInt(tokens[1]),getOrientation(tokens[2]) );
-    }
-    logger.logError(CLASS_NAME,"Issue Occured while Parsing the following Coordinates Query: "+aInQuery,PROMPT);
-    return null;
-  }
 
-  public String getOnlyFirstRotations(String aInQuery,String aInRemainQuery)
-  {
-    aInRemainQuery = aInQuery.substring(aInQuery.indexOf("A"),aInQuery.length());
-    return aInQuery.substring(0,aInQuery.indexOf("A"));
-  }
 
   public   OrientationEnum getOrientation(String aInToken)
   {

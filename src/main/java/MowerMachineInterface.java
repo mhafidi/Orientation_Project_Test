@@ -7,7 +7,7 @@ import coordinates.Position2D;
 public interface MowerMachineInterface
 {
 
-  public Position2D getCurrentPosition();
-  public Position2D computeDestination(String aInQuery);
+  void setNewPosition(Position2D aInNewPosition);
+  Position2D getCurrentPosition();
 
 }

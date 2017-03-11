@@ -35,33 +35,31 @@ public class Position2D
     this.orientation = aInPosition2D.getOrientation();
   }
 
-  public Position2D()
-  {
-
-  }
   public Position2D(String aInQuery)
   {
-    if(StringsUtil.getInstance().coordinatesValidator(aInQuery))
+    if (StringsUtil.getInstance().coordinatesValidator(aInQuery))
     {
       String delims = "[\\s]+"; //pattern based on space to decompose line into coordinates
       String[] tokens = aInQuery.split(delims);
-     x=Integer.parseInt(tokens[0]);
-      y=Integer.parseInt(tokens[1]);
-      orientation= StringsUtil.getInstance().getOrientation(tokens[2]);
+      x = Integer.parseInt(tokens[0]);
+      y = Integer.parseInt(tokens[1]);
+      orientation = StringsUtil.getInstance().getOrientation(tokens[2]);
     }
   }
 
 
-  public Boolean checkOutOfALimitedSpace(Integer aInMaxX,Integer aInMaxY,Integer aInMinX,Integer aInMinY)
+  public Boolean checkOutOfALimitedSpace(Integer aInMaxX, Integer aInMaxY, Integer aInMinX, Integer aInMinY)
   {
-    return x>aInMaxX || y>aInMaxY || x<aInMinX || y<aInMinY;
+    return x > aInMaxX || y > aInMaxY || x < aInMinX || y < aInMinY;
   }
+
   public void setPosition2D(Position2D aInPosition2D)
   {
-    x=aInPosition2D.getX();
-    y=aInPosition2D.getY();
-    orientation =this.getOrientation();
+    x = aInPosition2D.getX();
+    y = aInPosition2D.getY();
+    orientation = this.getOrientation();
   }
+
   public Integer getX()
   {
     return x;

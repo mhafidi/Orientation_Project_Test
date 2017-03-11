@@ -17,7 +17,7 @@ public class MainTestClass
   public static void main(String[]args)
   {
     Yard yard = new Yard(10,10,"yard1");
-    yard.addNewFile("C:\\Users\\mhafidi\\Documents\\Projects\\Orientation_Project_Test\\src\\test\\testFilesToRead\\testF.csv");
+    yard.addNewFile("c:\\Users\\mhafidi\\Documents\\Projects\\Orientation_Project_Test\\src\\test\\testFilesToRead\\testF.csv");
     yard.executeInstructions();
     yard.printCurrentCache();
 

@@ -21,7 +21,7 @@ public class FileParser
   PrintStream PROMPT = System.out;
   private Map<Integer,List<String>> filteredInstructions;
 
-  public FileParser(String aInFile)
+  public FileParser(String aInFile) throws FileNotFoundException
   {
     try
     {
@@ -33,7 +33,9 @@ public class FileParser
     catch (FileNotFoundException e)
     {
       logger.logError(CALSS_NAME, e.getMessage(), PROMPT);
+      throw e;
     }
+
 
   }
 

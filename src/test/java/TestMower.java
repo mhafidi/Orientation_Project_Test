@@ -10,5 +10,6 @@ public class TestMower
   @Test
   public void testMower()
   {
+    Yard yard = new Yard(100,100,"-Test");
   }
 }
